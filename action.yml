@@ -1,0 +1,14 @@
+name: "TypeScript Migration"
+description: "Tracks a TypeScript migration by a given source folder"
+inputs:
+  source-folder:
+    description: "Source folder"
+    required: true
+    default: "src"
+  base-branch:
+    description: "Base branch"
+    required: true
+    default: "main"
+runs:
+  using: "node16"
+  main: "dist/index.js"

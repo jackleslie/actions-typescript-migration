@@ -1,0 +1,13 @@
+{
+  "extends": "@transferwise/eslint-config",
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}
