@@ -13077,7 +13077,7 @@ var getMarkdownTable = function (status, title) {
         return "| `".concat(name, "` | ").concat(percentage, " |");
     });
     if (title) {
-        return "# ".concat(title, "\n  | Folder | TypeScript (%) |\n  | --- | --- |\n  ").concat(rowStrs.join('\n'));
+        return "# ".concat(title, "\n\n    | Folder | TypeScript (%) |\n    | --- | --- |\n    ").concat(rowStrs.join('\n'));
     }
     return "| Folder | TypeScript (%) |\n  | --- | --- |\n  ".concat(rowStrs.join('\n'));
 };
