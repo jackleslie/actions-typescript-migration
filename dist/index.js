@@ -13052,14 +13052,14 @@ var typescript_migration_assign = (undefined && undefined.__assign) || function 
 
 
 var getTypeScriptMigrationStatus = function (inputSourceFolder) {
-    var sourceFolder = external_path_default().resolve(process.cwd(), inputSourceFolder);
+    var sourceFolder = external_path_default().join(process.cwd(), inputSourceFolder);
     return external_fs_default().readdirSync(sourceFolder, { withFileTypes: true })
         .filter(function (value) { return value.isDirectory(); })
         .reduce(function (current, _a) {
         var _b;
         var name = _a.name;
         // e.g src/according => accordion
-        var folderName = __nccwpck_require__.ab + "actions-typescript-migration/" + sourceFolder + '/' + name;
+        var folderName = external_path_default().join(sourceFolder, name);
         var tsFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story).@(ts)?(x)"));
         var allFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story).@(js|ts)?(x)"));
         var percentage = Math.round((tsFiles.length / allFiles.length) * 100);
@@ -13094,8 +13094,11 @@ function run() {
             void createOrReplaceIssue(octokit, markdownTable);
         }
     }
-    catch (e) {
-        console.log(e);
+    catch (error) {
+        console.log(error);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
     }
 }
 run();

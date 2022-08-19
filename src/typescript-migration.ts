@@ -4,14 +4,14 @@ import path from 'path';
 import glob from 'glob';
 
 export const getTypeScriptMigrationStatus = (inputSourceFolder: string): Record<string, string> => {
-  const sourceFolder = path.resolve(process.cwd(), inputSourceFolder);
+  const sourceFolder = path.join(process.cwd(), inputSourceFolder);
 
   return fs
     .readdirSync(sourceFolder, { withFileTypes: true })
     .filter((value) => value.isDirectory())
     .reduce((current, { name }) => {
       // e.g src/according => accordion
-      const folderName = path.resolve(process.cwd(), sourceFolder, name);
+      const folderName = path.join(sourceFolder, name);
 
       const tsFiles = glob.sync(`${folderName}/**/!(*.test|*.spec|*.story).@(ts)?(x)`);
       const allFiles = glob.sync(`${folderName}/**/!(*.test|*.spec|*.story).@(js|ts)?(x)`);

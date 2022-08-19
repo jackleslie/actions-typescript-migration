@@ -22,8 +22,11 @@ function run() {
       const markdownTable = getMarkdownTable(typeScriptMigrationStatus);
       void createOrReplaceIssue(octokit, markdownTable);
     }
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    }
   }
 }
 
