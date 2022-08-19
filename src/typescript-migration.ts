@@ -42,10 +42,9 @@ export const getMarkdownTable = (status: Record<string, string>, title: string):
 
   if (title) {
     return `# ${title}
-
-    | Folder | TypeScript (%) |
-    | --- | --- |
-    ${rowStrs.join('\n')}`;
+  | Folder | TypeScript (%) |
+  | --- | --- |
+  ${rowStrs.join('\n')}`;
   }
 
   return `| Folder | TypeScript (%) |
