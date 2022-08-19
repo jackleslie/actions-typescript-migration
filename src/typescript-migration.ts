@@ -41,7 +41,8 @@ export const getMarkdownTable = (status: Record<string, string>, title: string):
   });
 
   if (title) {
-    return `# ${title}
+    return `
+    # ${title}
 
     | Folder | TypeScript (%) |
     | --- | --- |
