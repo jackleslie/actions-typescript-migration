@@ -9,6 +9,9 @@ inputs:
     description: "Base branch"
     required: true
     default: "main"
+  title:
+    description: "Optional title for the issue data"
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

@@ -13,9 +13,20 @@ export const getTypeScriptMigrationStatus = (inputSourceFolder: string): Record<
       // e.g src/according => accordion
       const folderName = path.join(sourceFolder, name);
 
-      const tsFiles = glob.sync(`${folderName}/**/!(*.test|*.spec|*.story).@(ts)?(x)`);
-      const allFiles = glob.sync(`${folderName}/**/!(*.test|*.spec|*.story).@(js|ts)?(x)`);
-      const percentage = Math.round((tsFiles.length / allFiles.length) * 100);
+      // e.g React components, utility files
+      const tsSourceFiles = glob.sync(
+        `${folderName}/**/!(*.test|*.spec|*.story|*.stories).@(ts)?(x)`,
+      );
+      const allSourceFiles = glob.sync(
+        `${folderName}/**/!(*.test|*.spec|*.story|*.stories).@(js|ts)?(x)`,
+      );
+
+      // skip folders with no source files
+      if (allSourceFiles.length === 0) {
+        return current;
+      }
+
+      const percentage = Math.round((tsSourceFiles.length / allSourceFiles.length) * 100);
 
       return {
         ...current,
@@ -24,10 +35,17 @@ export const getTypeScriptMigrationStatus = (inputSourceFolder: string): Record<
     }, {});
 };
 
-export const getMarkdownTable = (status: Record<string, string>): string => {
+export const getMarkdownTable = (status: Record<string, string>, title: string): string => {
   const rowStrs = Object.entries(status).map(([name, percentage]) => {
     return `| \`${name}\` | ${percentage} |`;
   });
+
+  if (title) {
+    return `# ${title}
+    | Folder | TypeScript (%) |
+    | --- | --- |
+    ${rowStrs.join('\n')}`;
+  }
 
   return `| Folder | TypeScript (%) |
   | --- | --- |

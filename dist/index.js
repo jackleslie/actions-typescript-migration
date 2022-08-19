@@ -13060,17 +13060,25 @@ var getTypeScriptMigrationStatus = function (inputSourceFolder) {
         var name = _a.name;
         // e.g src/according => accordion
         var folderName = external_path_default().join(sourceFolder, name);
-        var tsFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story).@(ts)?(x)"));
-        var allFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story).@(js|ts)?(x)"));
-        var percentage = Math.round((tsFiles.length / allFiles.length) * 100);
+        // e.g React components, utility files
+        var tsSourceFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story|*.stories).@(ts)?(x)"));
+        var allSourceFiles = glob_default().sync("".concat(folderName, "/**/!(*.test|*.spec|*.story|*.stories).@(js|ts)?(x)"));
+        // skip folders with no source files
+        if (allSourceFiles.length === 0) {
+            return current;
+        }
+        var percentage = Math.round((tsSourceFiles.length / allSourceFiles.length) * 100);
         return typescript_migration_assign(typescript_migration_assign({}, current), (_b = {}, _b[name] = "".concat(percentage, "%"), _b));
     }, {});
 };
-var getMarkdownTable = function (status) {
+var getMarkdownTable = function (status, title) {
     var rowStrs = Object.entries(status).map(function (_a) {
         var name = _a[0], percentage = _a[1];
         return "| `".concat(name, "` | ").concat(percentage, " |");
     });
+    if (title) {
+        return "# ".concat(title, "\n    | Folder | TypeScript (%) |\n    | --- | --- |\n    ").concat(rowStrs.join('\n'));
+    }
     return "| Folder | TypeScript (%) |\n  | --- | --- |\n  ".concat(rowStrs.join('\n'));
 };
 
@@ -13083,6 +13091,7 @@ function run() {
     try {
         var baseBranch = core.getInput('base-branch');
         var sourceFolder = core.getInput('source-folder');
+        var title = core.getInput('title');
         var octokit = github.getOctokit(process.env.GITHUB_TOKEN || '');
         console.log('> Calculating TypeScript migration status');
         var typeScriptMigrationStatus = getTypeScriptMigrationStatus(sourceFolder);
@@ -13090,7 +13099,7 @@ function run() {
         // TODO: revert
         if (github.context.ref !== "refs/heads/".concat(baseBranch)) {
             console.log('> Creating/updating bundle size issue');
-            var markdownTable = getMarkdownTable(typeScriptMigrationStatus);
+            var markdownTable = getMarkdownTable(typeScriptMigrationStatus, title);
             void createOrReplaceIssue(octokit, markdownTable);
         }
     }
