@@ -6,12 +6,25 @@ This action maintains a GitHub Issue with the current status of a TypeScript mig
 
 ### `source-folder`
 
-**Required** Your source code folder. Default `"src"`.
+Your source code folder. Default `"src"`.
 
 ### `base-branch`
 
-**Required** Your base branch. Default `"main"`.
+Your base branch. Default `"main"`.
+
+### `title`
+
+Custom issue title. Default `"TypeScript Migration"`.
 
 ## Example usage
 
-uses: jacklesliewise/actions-typescript-migration@main
+```yml
+steps:
+  - name: TypeScript Migration Status
+    uses: jacklesliewise/actions-typescript-migration@main
+    with:
+      source-folder: 'packages/components/src'
+      title: 'Neptune Components TypeScript Migration'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```

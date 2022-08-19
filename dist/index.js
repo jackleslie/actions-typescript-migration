@@ -12996,31 +12996,31 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     }
 };
 
-var ISSUE_TITLE = 'TypeScript Migration';
-function createOrReplaceIssue(octokit, body) {
+function createOrReplaceIssue(_a) {
+    var octokit = _a.octokit, body = _a.body, title = _a.title;
     return __awaiter(this, void 0, void 0, function () {
         var issues, existing, issue_number, response, response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, octokit.rest.issues.listForRepo(github.context.repo)];
                 case 1:
-                    issues = (_a.sent()).data;
-                    existing = issues.find(function (issue) { return issue.title === ISSUE_TITLE; });
+                    issues = (_b.sent()).data;
+                    existing = issues.find(function (issue) { return issue.title === title; });
                     if (!existing) return [3 /*break*/, 3];
                     issue_number = existing.number;
-                    console.log("Updating issue ".concat(issue_number, " with latest bundle sizes"));
+                    console.log("Updating issue ".concat(issue_number, " with latest migration status"));
                     return [4 /*yield*/, octokit.rest.issues.update(__assign(__assign({}, github.context.repo), { body: body, issue_number: issue_number }))];
                 case 2:
-                    response = _a.sent();
+                    response = _b.sent();
                     console.log("Issue update response status ".concat(response.status));
                     return [3 /*break*/, 5];
                 case 3:
-                    console.log("Creating issue ".concat(ISSUE_TITLE, " to show latest bundle sizes"));
-                    return [4 /*yield*/, octokit.rest.issues.create(__assign(__assign({}, github.context.repo), { body: body, title: ISSUE_TITLE }))];
+                    console.log("Creating issue ".concat(title, " to show latest migration status"));
+                    return [4 /*yield*/, octokit.rest.issues.create(__assign(__assign({}, github.context.repo), { body: body, title: title }))];
                 case 4:
-                    response = _a.sent();
+                    response = _b.sent();
                     console.log("Issue creation response status ".concat(response.status));
-                    _a.label = 5;
+                    _b.label = 5;
                 case 5: return [2 /*return*/];
             }
         });
@@ -13071,14 +13071,11 @@ var getTypeScriptMigrationStatus = function (inputSourceFolder) {
         return typescript_migration_assign(typescript_migration_assign({}, current), (_b = {}, _b[name] = "".concat(percentage, "%"), _b));
     }, {});
 };
-var getMarkdownTable = function (status, title) {
+var getMarkdownTable = function (status) {
     var rowStrs = Object.entries(status).map(function (_a) {
         var name = _a[0], percentage = _a[1];
         return "| `".concat(name, "` | ").concat(percentage, " |");
     });
-    if (title) {
-        return "\n    # ".concat(title, "\n\n    | Folder | TypeScript (%) |\n    | --- | --- |\n    ").concat(rowStrs.join('\n'));
-    }
     return "| Folder | TypeScript (%) |\n  | --- | --- |\n  ".concat(rowStrs.join('\n'));
 };
 
@@ -13099,8 +13096,8 @@ function run() {
         // TODO: revert
         if (github.context.ref !== "refs/heads/".concat(baseBranch)) {
             console.log('> Creating/updating bundle size issue');
-            var markdownTable = getMarkdownTable(typeScriptMigrationStatus, title);
-            void createOrReplaceIssue(octokit, markdownTable);
+            var markdownTable = getMarkdownTable(typeScriptMigrationStatus);
+            void createOrReplaceIssue({ octokit: octokit, body: markdownTable, title: title });
         }
     }
     catch (error) {

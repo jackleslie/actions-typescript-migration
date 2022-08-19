@@ -35,19 +35,10 @@ export const getTypeScriptMigrationStatus = (inputSourceFolder: string): Record<
     }, {});
 };
 
-export const getMarkdownTable = (status: Record<string, string>, title: string): string => {
+export const getMarkdownTable = (status: Record<string, string>): string => {
   const rowStrs = Object.entries(status).map(([name, percentage]) => {
     return `| \`${name}\` | ${percentage} |`;
   });
-
-  if (title) {
-    return `
-    # ${title}
-
-    | Folder | TypeScript (%) |
-    | --- | --- |
-    ${rowStrs.join('\n')}`;
-  }
 
   return `| Folder | TypeScript (%) |
   | --- | --- |

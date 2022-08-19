@@ -1,17 +1,18 @@
-name: "TypeScript Migration"
-description: "Tracks a TypeScript migration by a given source folder"
+name: 'TypeScript Migration'
+description: 'Tracks a TypeScript migration by a given source folder'
 inputs:
   source-folder:
-    description: "Source folder"
+    description: 'Source folder'
     required: true
-    default: "src"
+    default: 'src'
   base-branch:
-    description: "Base branch"
+    description: 'Base branch'
     required: true
-    default: "main"
+    default: 'main'
   title:
-    description: "Optional title for the issue data"
-    required: false
+    description: 'Custom issue title'
+    required: true
+    default: 'TypeScript Migration'
 runs:
-  using: "node16"
-  main: "dist/index.js"
+  using: 'node16'
+  main: 'dist/index.js'

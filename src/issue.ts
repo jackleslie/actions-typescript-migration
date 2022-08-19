@@ -2,16 +2,22 @@ import * as github from '@actions/github';
 
 import type { Octokit } from './types';
 
-const ISSUE_TITLE = 'TypeScript Migration';
-
-export async function createOrReplaceIssue(octokit: Octokit, body: string): Promise<void> {
+export async function createOrReplaceIssue({
+  octokit,
+  body,
+  title,
+}: {
+  octokit: Octokit;
+  body: string;
+  title: string;
+}): Promise<void> {
   const { data: issues } = await octokit.rest.issues.listForRepo(github.context.repo);
 
-  const existing = issues.find((issue) => issue.title === ISSUE_TITLE);
+  const existing = issues.find((issue) => issue.title === title);
 
   if (existing) {
     const issue_number = existing.number;
-    console.log(`Updating issue ${issue_number} with latest bundle sizes`);
+    console.log(`Updating issue ${issue_number} with latest migration status`);
 
     const response = await octokit.rest.issues.update({
       ...github.context.repo,
@@ -21,12 +27,12 @@ export async function createOrReplaceIssue(octokit: Octokit, body: string): Prom
 
     console.log(`Issue update response status ${response.status}`);
   } else {
-    console.log(`Creating issue ${ISSUE_TITLE} to show latest bundle sizes`);
+    console.log(`Creating issue ${title} to show latest migration status`);
 
     const response = await octokit.rest.issues.create({
       ...github.context.repo,
       body,
-      title: ISSUE_TITLE,
+      title,
     });
 
     console.log(`Issue creation response status ${response.status}`);

@@ -20,8 +20,8 @@ function run() {
     if (github.context.ref !== `refs/heads/${baseBranch}`) {
       console.log('> Creating/updating bundle size issue');
 
-      const markdownTable = getMarkdownTable(typeScriptMigrationStatus, title);
-      void createOrReplaceIssue(octokit, markdownTable);
+      const markdownTable = getMarkdownTable(typeScriptMigrationStatus);
+      void createOrReplaceIssue({ octokit, body: markdownTable, title });
     }
   } catch (error) {
     console.log(error);
