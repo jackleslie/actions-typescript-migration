@@ -13068,15 +13068,21 @@ var getTypeScriptMigrationStatus = function (inputSourceFolder) {
             return current;
         }
         var percentage = Math.round((tsSourceFiles.length / allSourceFiles.length) * 100);
-        return typescript_migration_assign(typescript_migration_assign({}, current), (_b = {}, _b[name] = "".concat(percentage, "%"), _b));
+        return typescript_migration_assign(typescript_migration_assign({}, current), (_b = {}, _b[name] = percentage, _b));
     }, {});
 };
 var getMarkdownTable = function (status) {
     var rowStrs = Object.entries(status).map(function (_a) {
         var name = _a[0], percentage = _a[1];
-        return "| `".concat(name, "` | ").concat(percentage, " |");
+        var percentageEntry = "".concat(percentage, "%");
+        var percentageEmoji = percentage === 100
+            ? ':tada:'
+            : percentage === 0
+                ? ':negative_squared_cross_mark:'
+                : ':construction:';
+        return "| `".concat(name, "` | ").concat(percentageEntry, " | ").concat(percentageEmoji, " |");
     });
-    return "| Folder | TypeScript (%) |\n  | --- | --- |\n  ".concat(rowStrs.join('\n'));
+    return "| Folder | TypeScript (%) | Status |\n  | --- | --- | --- |\n  ".concat(rowStrs.join('\n'));
 };
 
 ;// CONCATENATED MODULE: ./src/index.ts
